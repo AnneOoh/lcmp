@@ -61,6 +61,7 @@ And all things will be done in a few minutes.
 ```bash
 yum -y install wget git
 git clone https://github.com/moewhale/lcmp-teddysun.git
+mv lcmp-teddysun lcmp
 cd lcmp
 chmod 755 *.sh
 ./lcmp.sh 2>&1 | tee lcmp.log
@@ -70,6 +71,7 @@ chmod 755 *.sh
 ```bash
 apt-get -y install wget git
 git clone https://github.com/moewhale/lcmp-teddysun.git
+mv lcmp-teddysun lcmp
 cd lcmp
 chmod 755 *.sh
 ./lcmp.sh 2>&1 | tee lcmp.log
