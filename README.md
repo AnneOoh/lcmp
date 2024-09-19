@@ -60,7 +60,7 @@ And all things will be done in a few minutes.
 - If your server's OS: Enterprise Linux 8 / 9
 ```bash
 yum -y install wget git
-git clone https://github.com/teddysun/lcmp.git
+git clone https://github.com/moewhale/lcmp-teddysun.git
 cd lcmp
 chmod 755 *.sh
 ./lcmp.sh 2>&1 | tee lcmp.log
@@ -69,7 +69,7 @@ chmod 755 *.sh
 - If your server's OS: Debian 10+ / Ubuntu 20.04+
 ```bash
 apt-get -y install wget git
-git clone https://github.com/teddysun/lcmp.git
+git clone https://github.com/moewhale/lcmp-teddysun.git
 cd lcmp
 chmod 755 *.sh
 ./lcmp.sh 2>&1 | tee lcmp.log
