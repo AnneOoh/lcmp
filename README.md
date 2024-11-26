@@ -36,8 +36,8 @@ And all things will be done in a few minutes.
 
 ## System requirements
 
-- Hard disk space: 5GB
-- RAM: 512MB
+- Hard disk space: 5 GiB
+- RAM: 512 MiB
 - Internet connection is required
 - Correct repository
 - User: root
@@ -45,14 +45,14 @@ And all things will be done in a few minutes.
 ## Supported Software
 
 - Caddy 2
-- MariaDB 10.11
-- PHP-7.4, PHP-8.0, PHP-8.1, PHP-8.2, PHP-8.3
+- MariaDB 10.11, 11.4
+- PHP 7.4, 8.0, 8.1, 8.2, 8.3, 8.4
 
-※Explanation
+※ Details
 
-- Caddy rpm packages provided by [Teddysun Repository](https://dl.lamp.sh/linux/), deb packages provided by [cloudsmith.io](https://cloudsmith.io/~caddy/repos/)
 - MariaDB packages provided by [MariaDB Repository](https://downloads.mariadb.com/MariaDB/)
 - PHP rpm packages provided by [remi Repository](https://rpms.remirepo.net/), deb packages provided by [deb.sury.org](https://deb.sury.org/)
+- Caddy rpm packages provided by [Teddysun Repository](https://dl.lamp.sh/linux/), deb packages provided by [cloudsmith.io](https://cloudsmith.io/~caddy/repos/)
 
 ## Installation
 
@@ -93,7 +93,7 @@ chown root:caddy /var/lib/php/opcache
 ```bash
 apt-get install --only-upgrade -y caddy
 apt-get install --only-upgrade -y mariadb-*
-# for example: php_ver=[7.4|8.0|8.1|8.2|8.3]
+# for example: php_ver=[7.4|8.0|8.1|8.2|8.3|8.4]
 php_ver="8.2"
 apt-get install --only-upgrade -y php${php_ver}-*
 ```
@@ -111,7 +111,7 @@ yum remove -y php-*
 ```bash
 apt-get remove -y caddy
 apt-get remove -y mariadb-*
-# for example: php_ver=[7.4|8.0|8.1|8.2|8.3]
+# for example: php_ver=[7.4|8.0|8.1|8.2|8.3|8.4]
 php_ver="8.2"
 apt-get remove -y php${php_ver}-*
 ```
@@ -154,6 +154,7 @@ apt-get remove -y php${php_ver}-*
 | lcmp stop        | Stop all of LCMP services                             |
 | lcmp restart     | Restart all of LCMP services                          |
 | lcmp status      | Check all of LCMP services status                     |
+| lcmp version     | Print all of LCMP software version                    |
 | lcmp vhost add   | Create a new Caddy virtual host                       |
 | lcmp vhost list  | List all of Caddy virtual hosts                       |
 | lcmp vhost del   | Delete a Caddy virtual host                           |
