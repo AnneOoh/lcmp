@@ -6,7 +6,6 @@
 # Supported OS:
 # Enterprise Linux 8 (CentOS 8, RHEL 8, Rocky Linux 8, AlmaLinux 8, Oracle Linux 8)
 # Enterprise Linux 9 (CentOS 9, RHEL 9, Rocky Linux 9, AlmaLinux 9, Oracle Linux 9)
-# Debian 10
 # Debian 11
 # Debian 12
 # Ubuntu 20.04
@@ -335,7 +334,7 @@ if check_sys rhel; then
     fi
 elif check_sys debian || check_sys ubuntu; then
     _error_detect "apt-get update"
-    _error_detect "apt-get -yq install lsb-release ca-certificates curl"
+    _error_detect "apt-get -yq install lsb-release ca-certificates curl gnupg"
     _error_detect "apt-get -yq install vim tar zip unzip net-tools bind9-utils screen git virt-what wget whois mtr traceroute iftop htop jq tree"
     if ufw status >/dev/null 2>&1; then
         _error_detect "ufw allow http"
@@ -377,16 +376,12 @@ sleep 3
 clear
 _info "LCMP (Linux + Caddy + MariaDB + PHP) installation start"
 if check_sys rhel; then
-    # if get_rhelversion 8 || get_rhelversion 9; then
-        # _error_detect "yum install -yq dnf-plugins-core"
-        # _error_detect "yum copr enable -yq @caddy/caddy"
-    # fi
     _error_detect "yum install -yq caddy"
 elif check_sys debian || check_sys ubuntu; then
-    _error_detect "wget -qO caddy-stable_deb.sh https://dl.cloudsmith.io/public/caddy/stable/setup.deb.sh"
-    _error_detect "chmod +x caddy-stable_deb.sh"
-    _error_detect "./caddy-stable_deb.sh"
-    _error_detect "rm -f caddy-stable_deb.sh"
+    _error_detect "curl -fsSL https://dl.lamp.sh/shadowsocks/DEB-GPG-KEY-Teddysun | gpg --dearmor --yes -o /usr/share/keyrings/deb-gpg-key-teddysun.gpg"
+    _error_detect "chmod a+r /usr/share/keyrings/deb-gpg-key-teddysun.gpg"
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deb-gpg-key-teddysun.gpg] https://dl.lamp.sh/shadowsocks/$(lsb_release -si | tr '[A-Z]' '[a-z]')/ $(lsb_release -sc) main" >/etc/apt/sources.list.d/teddysun.list
+    _error_detect "apt-get update"
     _error_detect "apt-get install -y caddy"
 fi
 _info "Caddy installation completed"
@@ -422,10 +417,11 @@ fi
 _info "MariaDB installation completed"
 
 lnum=$(sed -n '/\[mysqld\]/=' "${mariadb_cnf}")
-sed -i "${lnum}ainnodb_buffer_pool_size = 100M\nmax_allowed_packet = 1024M\nnet_read_timeout = 3600\nnet_write_timeout = 3600" "${mariadb_cnf}"
+[ -n "${lnum}" ] && sed -i "${lnum}ainnodb_buffer_pool_size = 100M\nmax_allowed_packet = 1024M\nnet_read_timeout = 3600\nnet_write_timeout = 3600" "${mariadb_cnf}"
 lnum=$(sed -n '/\[mariadb\]/=' "${mariadb_cnf}" | tail -1)
-sed -i "${lnum}acharacter-set-server = utf8mb4\n\n\[client-mariadb\]\ndefault-character-set = utf8mb4" "${mariadb_cnf}"
+[ -n "${lnum}" ] && sed -i "${lnum}acharacter-set-server = utf8mb4\n\n\[client-mariadb\]\ndefault-character-set = utf8mb4" "${mariadb_cnf}"
 _error_detect "systemctl start mariadb"
+sleep 3
 /usr/bin/mariadb -e "grant all privileges on *.* to root@'127.0.0.1' identified by \"${db_pass}\" with grant option;"
 /usr/bin/mariadb -e "grant all privileges on *.* to root@'localhost' identified by \"${db_pass}\" with grant option;"
 /usr/bin/mariadb -uroot -p"${db_pass}" 2>/dev/null <<EOF
@@ -438,12 +434,10 @@ delete from mysql.user where user='PUBLIC';
 flush privileges;
 exit
 EOF
-_error_detect "cd /data/www/default"
 # Install phpMyAdmin
-_error_detect "wget -q https://dl.lamp.sh/files/pma.tar.gz"
-_error_detect "tar zxf pma.tar.gz"
+_error_detect "wget -qO pma.tar.gz https://dl.lamp.sh/files/pma.tar.gz"
+_error_detect "tar zxf pma.tar.gz -C /data/www/default/"
 _error_detect "rm -f pma.tar.gz"
-_error_detect "cd ${cur_dir}"
 _info "/usr/bin/mariadb -uroot -p 2>/dev/null < /data/www/default/pma/sql/create_tables.sql"
 /usr/bin/mariadb -uroot -p"${db_pass}" 2>/dev/null </data/www/default/pma/sql/create_tables.sql
 _info "Set MariaDB completed"
@@ -474,7 +468,7 @@ elif check_sys debian || check_sys ubuntu; then
     sock_location="/run/mysqld/mysqld.sock"
     if check_sys debian; then
         _error_detect "curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg"
-        echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" >/etc/apt/sources.list.d/php.list
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" >/etc/apt/sources.list.d/php.list
     fi
     if check_sys ubuntu; then
         _error_detect "add-apt-repository -y ppa:ondrej/php"
