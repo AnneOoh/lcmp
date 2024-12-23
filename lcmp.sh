@@ -441,7 +441,7 @@ _error_detect "rm -f pma.tar.gz"
 _info "/usr/bin/mariadb -uroot -p 2>/dev/null < /data/www/default/pma/sql/create_tables.sql"
 /usr/bin/mariadb -uroot -p"${db_pass}" 2>/dev/null </data/www/default/pma/sql/create_tables.sql
 # 生成 22位 僅包含字母與數字的字串
-PMA_Random_String=$(head -c 100 /dev/urandom | tr -dc 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789' | fold -w 22 | head -n 1)
+PMA_Random_String=$(head -c 100 /dev/urandom | tr -dc 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789_' | fold -w 22 | head -n 1)
 # 更改目錄名稱
 mv /data/www/default/pma/ /data/www/default/${PMA_Random_String}/
 _info "Set MariaDB completed"
