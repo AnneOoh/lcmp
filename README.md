@@ -8,7 +8,7 @@
 
 LCMP (Linux + Caddy + MariaDB + PHP) is a powerful bash script for the installation of Caddy2 + MariaDB + PHP and so on.
 
-You can install Caddy2 + MariaDB + PHP in a smaller memory VPS by yum(dnf) or apt-get command, Just need to input numbers to choose what you want to install before installation.
+You can install Caddy2 + MariaDB + PHP in a smaller memory VPS by `yum` / `dnf` or `apt-get` command, Just need to input numbers to choose what you want to install before installation.
 
 And all things will be done in a few minutes.
 
@@ -45,7 +45,7 @@ And all things will be done in a few minutes.
 
 ## Supported Software
 
-- Caddy 2 ※ Caddy packages provided by [Teddysun Repository](https://dl.lamp.sh/shadowsocks/)
+- Caddy 2 ※ Caddy package provided by [Teddysun Repository](https://dl.lamp.sh/shadowsocks/)
 - MariaDB 10.11, 11.4 ※ MariaDB packages provided by [MariaDB Repository](https://downloads.mariadb.com/MariaDB/)
 - PHP 7.4, 8.0, 8.1, 8.2, 8.3, 8.4 ※ PHP rpm packages provided by [Remi Repository](https://rpms.remirepo.net/), deb packages provided by [deb.sury.org](https://deb.sury.org/)
 
@@ -84,9 +84,7 @@ yum update -y caddy
 yum update -y MariaDB-*
 yum update -y php-*
 # Change PHP directory's group for Caddy again if you upgraded PHP version
-chown root:caddy /var/lib/php/session
-chown root:caddy /var/lib/php/wsdlcache
-chown root:caddy /var/lib/php/opcache
+chown root:caddy /var/lib/php/{session,wsdlcache,opcache}
 ```
 
 - If your server's OS: Debian 11+ / Ubuntu 20.04+
@@ -141,10 +139,10 @@ apt-get remove -y php${php_ver}-*
 
 | Process     | Command                                                    |
 |-------------|------------------------------------------------------------|
-| PHP (rpm)   | systemctl [start\|stop\|status\|restart] php-fpm           |
-| PHP (deb)   | systemctl [start\|stop\|status\|restart] php${php_ver}-fpm |
 | Caddy       | systemctl [start\|stop\|status\|restart] caddy             |
 | MariaDB     | systemctl [start\|stop\|status\|restart] mariadb           |
+| PHP (rpm)   | systemctl [start\|stop\|status\|restart] php-fpm           |
+| PHP (deb)   | systemctl [start\|stop\|status\|restart] php${php_ver}-fpm |
 
 ## lcmp Command
 
